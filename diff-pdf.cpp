@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#define CMD_ONLY
 
 #include "bmpviewer.h"
 #include "gutter.h"
@@ -497,6 +499,7 @@ bool doc_compare(PopplerDocument *doc1, PopplerDocument *doc2,
     return (pages_differ == 0) && (pages1 == pages2);
 }
 
+#ifndef CMD_ONLY
 
 // ------------------------------------------------------------------------
 // wxWidgets GUI
@@ -854,6 +857,7 @@ private:
 
 IMPLEMENT_APP_NO_MAIN(DiffPdfApp);
 
+#endif //CMD_ONLY
 
 // ------------------------------------------------------------------------
 // main()
@@ -975,12 +979,14 @@ int main(int argc, char *argv[])
     {
         retval = doc_compare(doc1, doc2, pdf_file.utf8_str(), NULL) ? 0 : 1;
     }
+	#ifndef CMD_ONLY
     else if ( parser.Found(wxT("view")) )
     {
         wxGetApp().SetData(parser.GetParam(0), doc1,
                            parser.GetParam(1), doc2);
         retval = wxEntry(argc, argv);
     }
+	#endif //CMD_ONLY
     else
     {
         retval = doc_compare(doc1, doc2, NULL, NULL) ? 0 : 1;
